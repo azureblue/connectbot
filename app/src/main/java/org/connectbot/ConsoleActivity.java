@@ -1062,6 +1062,17 @@ public class ConsoleActivity extends AppCompatActivity implements BridgeDisconne
 		}
 	}
 
+	@Override
+	public void onBackPressed() {
+		TerminalView terminalView = adapter.getCurrentTerminalView();
+		if (terminalView != null) {
+			TerminalBridge bridge = terminalView.bridge;
+			if (bridge.host.getDisconnectOnClose())
+				bridge.dispatchDisconnect(true);
+		}
+		super.onBackPressed();
+	}
+
 	/* (non-Javadoc)
 	 * @see android.app.Activity#onNewIntent(android.content.Intent)
 	 */
@@ -1116,7 +1127,6 @@ public class ConsoleActivity extends AppCompatActivity implements BridgeDisconne
 	@Override
 	public void onStop() {
 		super.onStop();
-
 		unbindService(connection);
 	}
 
