@@ -465,6 +465,14 @@
 			android:title="@string/hostpref_quickdisconnect_title"
 			app:summary="@string/hostpref_quickdisconnect_summary"
 			/>
+		<org.connectbot.views.CheckableMenuItem
+			android:id="@+id/disconnect_on_close_item"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:icon="@drawable/ic_sync_disabled"
+			android:title="@string/hostpref_disconnect_on_close_title"
+			app:summary="@string/hostpref_disconnect_on_close_summary"
+		/>
 
 		<RelativeLayout
 			android:id="@+id/postlogin_item"

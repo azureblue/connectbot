@@ -125,6 +125,7 @@ public class HostEditorFragment extends Fragment {
 	private CheckableMenuItem mStartShellSwitch;
 	private CheckableMenuItem mStayConnectedSwitch;
 	private CheckableMenuItem mCloseOnDisconnectSwitch;
+	private CheckableMenuItem mDisconnectOnCloseSwitch;
 	private EditText mPostLoginAutomationField;
 	private HostTextFieldWatcher mFontSizeTextChangeListener;
 
@@ -472,6 +473,17 @@ public class HostEditorFragment extends Fragment {
 				handleHostChange();
 			}
 		});
+
+		mDisconnectOnCloseSwitch = view.findViewById(R.id.disconnect_on_close_item);
+		mDisconnectOnCloseSwitch.setChecked(mHost.getDisconnectOnClose());
+		mDisconnectOnCloseSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+			@Override
+			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+				mHost.setDisconnectOnClose(isChecked);
+				handleHostChange();
+			}
+		});
+
 
 		mPostLoginAutomationField = view.findViewById(R.id.post_login_automation_field);
 		mPostLoginAutomationField.setText(mHost.getPostLogin());

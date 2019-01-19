@@ -52,7 +52,7 @@ public class HostDatabase extends RobustSQLiteOpenHelper implements HostStorage,
 	public final static String TAG = "CB.HostDatabase";
 
 	public final static String DB_NAME = "hosts";
-	public final static int DB_VERSION = 25;
+	public final static int DB_VERSION = 26;
 
 	public final static String TABLE_HOSTS = "hosts";
 	public final static String FIELD_HOST_NICKNAME = "nickname";
@@ -73,6 +73,7 @@ public class HostDatabase extends RobustSQLiteOpenHelper implements HostStorage,
 	public final static String FIELD_HOST_ENCODING = "encoding";
 	public final static String FIELD_HOST_STAYCONNECTED = "stayconnected";
 	public final static String FIELD_HOST_QUICKDISCONNECT = "quickdisconnect";
+	public final static String FIELD_HOST_DISCONNECTONCLOSE = "disconnectonclose";
 
 	public final static String TABLE_KNOWNHOSTS = "knownhosts";
 	public final static String FIELD_KNOWNHOSTS_HOSTID = "hostid";
@@ -142,7 +143,8 @@ public class HostDatabase extends RobustSQLiteOpenHelper implements HostStorage,
 			+ FIELD_HOST_COMPRESSION + " TEXT DEFAULT '" + Boolean.toString(false) + "', "
 			+ FIELD_HOST_ENCODING + " TEXT DEFAULT '" + ENCODING_DEFAULT + "', "
 			+ FIELD_HOST_STAYCONNECTED + " TEXT DEFAULT '" + Boolean.toString(false) + "', "
-			+ FIELD_HOST_QUICKDISCONNECT + " TEXT DEFAULT '" + Boolean.toString(false) + "'";
+			+ FIELD_HOST_QUICKDISCONNECT + " TEXT DEFAULT '" + Boolean.toString(false) + "',"
+			+ FIELD_HOST_DISCONNECTONCLOSE + " TEXT DEFAULT '" + Boolean.toString(false) + "'";
 
 	public static final String CREATE_TABLE_HOSTS = "CREATE TABLE " + TABLE_HOSTS
 			+ " (" + TABLE_HOSTS_COLUMNS + ")";
@@ -392,10 +394,15 @@ public class HostDatabase extends RobustSQLiteOpenHelper implements HostStorage,
 					+ FIELD_HOST_COMPRESSION + ", "
 					+ FIELD_HOST_ENCODING + ", "
 					+ FIELD_HOST_STAYCONNECTED + ", "
-					+ FIELD_HOST_QUICKDISCONNECT
+					+ FIELD_HOST_QUICKDISCONNECT + ", "
+					+ "'" + Boolean.toString(false) + "'"
 					+ " FROM " + TABLE_HOSTS);
 			db.execSQL("DROP TABLE " + TABLE_HOSTS);
 			db.execSQL("ALTER TABLE " + TABLE_HOSTS + "_upgrade RENAME TO " + TABLE_HOSTS);
+			// fall through
+			case 25:
+				db.execSQL("ALTER TABLE " + TABLE_HOSTS
+					+ " ADD COLUMN " + FIELD_HOST_DISCONNECTONCLOSE + " TEXT DEFAULT '" + Boolean.toString(false) + "'");
 		}
 	}
 
@@ -506,7 +513,8 @@ public class HostDatabase extends RobustSQLiteOpenHelper implements HostStorage,
 			COL_COMPRESSION = c.getColumnIndexOrThrow(FIELD_HOST_COMPRESSION),
 			COL_ENCODING = c.getColumnIndexOrThrow(FIELD_HOST_ENCODING),
 			COL_STAYCONNECTED = c.getColumnIndexOrThrow(FIELD_HOST_STAYCONNECTED),
-			COL_QUICKDISCONNECT = c.getColumnIndexOrThrow(FIELD_HOST_QUICKDISCONNECT);
+			COL_QUICKDISCONNECT = c.getColumnIndexOrThrow(FIELD_HOST_QUICKDISCONNECT),
+			COL_DISCONNECTONCLOSE = c.getColumnIndexOrThrow(FIELD_HOST_DISCONNECTONCLOSE);
 
 		while (c.moveToNext()) {
 			HostBean host = new HostBean();
@@ -530,6 +538,7 @@ public class HostDatabase extends RobustSQLiteOpenHelper implements HostStorage,
 			host.setEncoding(c.getString(COL_ENCODING));
 			host.setStayConnected(Boolean.valueOf(c.getString(COL_STAYCONNECTED)));
 			host.setQuickDisconnect(Boolean.valueOf(c.getString(COL_QUICKDISCONNECT)));
+			host.setDisconnectOnClose(Boolean.valueOf(c.getString(COL_DISCONNECTONCLOSE)));
 
 			hosts.add(host);
 		}

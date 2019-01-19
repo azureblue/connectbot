@@ -673,4 +673,6 @@
 	     Added to the end of a key description to indicate that the key is encrypted (i.e,
 	     password protected). -->
 	<string name="key_attribute_encrypted">(encrypted)</string>
+    <string name="hostpref_disconnect_on_close_title">Disconnect on close</string>
+	<string name="hostpref_disconnect_on_close_summary">Disconnect immediately after closing terminal view.</string>
 </resources>

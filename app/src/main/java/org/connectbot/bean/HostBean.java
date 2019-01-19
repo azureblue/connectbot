@@ -56,6 +56,7 @@ public class HostBean extends AbstractBean {
 	private String encoding = HostDatabase.ENCODING_DEFAULT;
 	private boolean stayConnected = false;
 	private boolean quickDisconnect = false;
+	private boolean disconnectOnClose = false;
 
 	public HostBean() {
 
@@ -198,6 +199,14 @@ public class HostBean extends AbstractBean {
 		return quickDisconnect;
 	}
 
+	public boolean getDisconnectOnClose() {
+		return disconnectOnClose;
+	}
+
+	public void setDisconnectOnClose(boolean disconnectOnClose) {
+		this.disconnectOnClose = disconnectOnClose;
+	}
+
 	@SuppressLint("DefaultLocale")
 	public String getDescription() {
 		String description = String.format("%s@%s", username, hostname);
@@ -230,6 +239,7 @@ public class HostBean extends AbstractBean {
 		values.put(HostDatabase.FIELD_HOST_ENCODING, encoding);
 		values.put(HostDatabase.FIELD_HOST_STAYCONNECTED, Boolean.toString(stayConnected));
 		values.put(HostDatabase.FIELD_HOST_QUICKDISCONNECT, Boolean.toString(quickDisconnect));
+		values.put(HostDatabase.FIELD_HOST_DISCONNECTONCLOSE, Boolean.toString(disconnectOnClose));
 
 		return values;
 	}
@@ -254,6 +264,7 @@ public class HostBean extends AbstractBean {
 		host.setEncoding(values.getAsString(HostDatabase.FIELD_HOST_ENCODING));
 		host.setStayConnected(values.getAsBoolean(HostDatabase.FIELD_HOST_STAYCONNECTED));
 		host.setQuickDisconnect(values.getAsBoolean(HostDatabase.FIELD_HOST_QUICKDISCONNECT));
+		host.setDisconnectOnClose(values.getAsBoolean(HostDatabase.FIELD_HOST_DISCONNECTONCLOSE));
 		return host;
 	}
 
